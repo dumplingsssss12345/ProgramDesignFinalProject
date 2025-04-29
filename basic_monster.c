@@ -346,6 +346,61 @@ void draw_monsters() {
     }
 }
 
+// 檢查玩家是否與怪物相撞
+void check_collision(Hero *hero) {
+    static int invincibility_timer = 0; // 無敵時間計數器
+    
+    // 如果玩家處於無敵狀態，減少計時器並返回
+    if (invincibility_timer > 0) {
+        invincibility_timer--;
+        return;
+    }
+
+    for (int i = 0; i < current_monster_count; i++) 
+    {
+        if (monsters[i].is_active) 
+        {
+            // 檢查玩家與2x2怪物的碰撞
+            bool collision = false;
+            bool result=CheckCollsionBoxes(hero->box,monsters[i].box);
+            if(result==1) collision=true;
+    
+
+            if (collision) 
+            {
+                // 怪物受到傷害
+                monsters[i].health--;
+
+                 // 設置碰撞後的無敵時間
+                invincibility_timer = 60;
+                
+                // 玩家受到傷害 (新增)
+                hero->hp-=50;;
+
+                
+                // 如果玩家生命值歸零，直接返回
+                if (hero->hp <= 0) {
+                    return;
+                }
+                
+                // 僅當怪物生命值為0或更低時才爆炸
+                if (monsters[i].health <= 0) {
+                    // 在怪物生命0時創建爆炸
+                    create_explosion(monsters[i].x, monsters[i].y, monsters[i].color);
+                    // 標記怪物為非活躍
+                    monsters[i].is_active = 0;
+                    active_monster_count--;
+                    
+                    // 增加死亡怪物計數
+                    dead_monster_count++;
+                    
+                }
+
+                break;
+            }
+        }
+    } 
+}
 
 
 

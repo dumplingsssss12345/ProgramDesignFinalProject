@@ -36,8 +36,8 @@ void spawn_monsters() ;// 初始化怪物位置
 void move_monsters_towards_player(Hero *hero);// 讓怪物追蹤玩家並從四周包圍
 void add_monsters(Hero *hero);//新增新的怪物
 void replace_missing_monsters(Hero *hero);//檢查並替換消失的怪物
+void check_collision(Hero *hero);//檢查怪物和玩家的碰撞
 void draw_monsters();
-
 
 
 
