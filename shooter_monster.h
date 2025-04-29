@@ -1,14 +1,27 @@
+#ifndef SHOOTERMONSTER_H
+#define SHOOTERMONSTER_H
+
 #include<raylib.h>
 #include"hero.h"
 #include"monster.h"
 #include"basic_monster.h"
 
 // 射擊型怪物相關變數
-#define MAX_SHOOTER_MONSTERS 10  // 最大射擊怪物數量
-#define DEAD_MONSTERS_TO_SPAWN_SHOOTER 10  // 每10隻小怪死亡後生成1隻射擊怪物
-#define MAX_PROJECTILES 20  // 最大射擊物數量
-#define PROJECTILE_RANGE 10  // 射程範圍
-#define SHOOTER_FIRE_CHANCE 80  // 射擊機率(數值越小越容易射擊，範圍1-100)
+
+//最大射擊怪物數量
+#define MAX_SHOOTER_MONSTERS 10  
+
+// 每10隻小怪死亡後生成1隻射擊怪物
+#define DEAD_MONSTERS_TO_SPAWN_SHOOTER 10  
+
+// 最大射擊物數量
+#define MAX_PROJECTILES 20  
+
+// 射程範圍
+#define PROJECTILE_RANGE 10  
+
+// 射擊機率(數值越小越容易射擊，範圍1-100)
+#define SHOOTER_FIRE_CHANCE 80  
 
 typedef struct {
     // Texture2D texture;
@@ -54,3 +67,5 @@ void update_projectiles(Hero *hero);//火焰射擊物的更新
 
 void draw_shooter_monsters();//繪製射擊怪物
 void draw_projectiles();//繪製射擊物(火焰)
+
+#endif

@@ -19,4 +19,5 @@ Barrier* BarrierInit();                                   //結界的初始化�
 void BarrierAttack(Weapon* self);                        //結界的攻擊函數
 void BarrierUpdate(Weapon* self, double deltaTime);      //結界的狀態更新函數
 void BarrierDestroy(Weapon* slef);                       //結界的銷毀函數
+double CheckBarrierDemage(Weapon* self, struct CollisionBox* box); //結界的傷害碰撞函數
 #endif

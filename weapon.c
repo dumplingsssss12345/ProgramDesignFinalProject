@@ -23,5 +23,11 @@ Weapon* WeaponInition(char name[51], Texture2D texture, double attackPower, doub
 
   weapon -> isAttack = false;  
 
+  weapon -> attack = NULL;
+  weapon -> update = NULL;
+  weapon -> destroy = NULL;
+
+  weapon -> checkDemage = NULL;
+
   return weapon;
 } 

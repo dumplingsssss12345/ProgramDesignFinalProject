@@ -21,5 +21,6 @@ typedef struct FireBall{
 void FireBallAttack(Weapon* self);                        //火球的攻擊函數
 void FireBallUpdate(Weapon* self, float deltaTime);       //火球的狀態更新函數
 void FireBallDestroy(Weapon* slef);                       //火球的銷毀函數
+double CheckFireBallDemage(Weapon* self, struct CollsionBox box); //火球的傷害碰撞函數
 
 #endif

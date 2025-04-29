@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdlib.h>
+#include "collisionbox.h"
 #include "weapon.h"
 #include "barrier.h"
 
@@ -23,6 +24,7 @@ Barrier* BarrierInit() {
   barrier->base.attack = BarrierAttack;
   barrier->base.update = BarrierUpdate;
   barrier->base.destroy = BarrierDestroy;
+  barrier->base.checkDemage = CheckBarrierDemage;
 
   barrier->circleCenter = (Vector2) {
     barrier->base.position.x + barrier->base.texture.width/2.0f + 180.0f,
@@ -58,5 +60,16 @@ void BarrierDestroy(Weapon *self) {
   Barrier* barrier = (Barrier*)self;
 
   free(barrier);
+}
+
+double CheckBarrierDemage(Weapon *self, struct CollisionBox *box) {
+  Barrier* barrier = (Barrier*)self;
+  double demage = 0.0f;
+
+  if(CheckCollisionBoxAndCircle(*box, barrier->circleCenter, barrier->radius)) {
+    demage += barrier->base.attackPower;
+  }
+
+  return demage;
 }
 

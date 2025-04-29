@@ -18,4 +18,5 @@ typedef struct ShockStaff{
 void ShockStaffAttack(Weapon* self);                        //震擊杖的攻擊函數
 void ShockStaffUpdate(Weapon* self, float deltaTime);       //震擊杖的狀態更新函數
 void ShockStaffDestroy(Weapon* slef);                       //震擊杖的銷毀函數
+double CheckShockStaffDemage(Weapon* self, struct CollsionBox box); //震擊杖的傷害碰撞函數
 #endif

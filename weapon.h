@@ -2,6 +2,7 @@
 #define WEAPON_H
 
 #include <raylib.h>
+#include "collisionbox.h"
 
 typedef struct Weapon{
   //武器基本屬性
@@ -25,6 +26,8 @@ typedef struct Weapon{
   void (*attack)(struct Weapon* self);                        //武器攻擊函數，用以生成CollsionBox,或是Circle來進行攻擊碰撞判定
   void (*update)(struct Weapon* self, double deltaTime);      //武器狀態更新函數，用以更新武器冷卻時間、繪製攻擊動畫
   void (*destroy)(struct Weapon* self);                       //武器銷毀函數，用以將武器從記憶體中清除
+
+  double (*checkDemage)(struct Weapon* self,struct CollisionBox* box); //傷害檢查函數，確認傳進來的碰撞箱是否在武器的攻擊範圍內，並回傳受到的傷害值
  
 }Weapon;
 

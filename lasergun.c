@@ -26,6 +26,7 @@ LaserGun* LaserGunInit() {
   base -> attack = LaserGunAttack;
   base -> update = LaserGunUpdate;
   base -> destroy = LaserGunDestroy;
+  base -> checkDemage = CheckLaserGunDemage;
 
   lasergun -> base = *base;
   free(base);
@@ -103,4 +104,15 @@ void LaserGunDestroy(Weapon *self) {
   UnloadTexture(self->texture);
 
   free(self);
+}
+
+double CheckLaserGunDemage(Weapon *self,CollisionBox* box) {
+  LaserGun* laser = (LaserGun*) self;
+  double damage = 0.0f;
+
+  if(laser->base.isAttack && CheckCollsionBoxes(*box, laser->box)) {
+    damage += laser->base.attackPower;
+  }
+
+  return damage;
 }

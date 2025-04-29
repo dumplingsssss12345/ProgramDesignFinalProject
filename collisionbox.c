@@ -12,7 +12,7 @@ CollisionBox* CollisionBoxInit(Rectangle rec, float rotationAngle) {
     return box;
 }
 
-bool CheckCollsionBox(CollisionBox box1, CollisionBox box2) {
+bool CheckCollsionBoxes(CollisionBox box1, CollisionBox box2) {
   
 // Get centers of both boxes
     Vector2 center1 = { box1.rec.x + box1.rec.width / 2, box1.rec.y + box1.rec.height / 2 };

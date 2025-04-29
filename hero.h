@@ -33,5 +33,6 @@ void HeroMove(Hero* self);                                   //依照輸入決�
 void HeroDraw(Hero* self);                                   //繪製角色貼圖
 void HeroUpdate(Hero* self, double deltaTime);               //更新角色狀態（武器冷卻時間等）
 void HeroDestroy(Hero* self);                                //角色銷毀函數
+double CheckDemage(CollisionBox* box, Hero* self);           //傷害檢查函數，此函數會將傳進來的collsionbox與weapons的攻擊範圍進行檢查，檢查完畢後會傳回受到的總傷害
 
 #endif

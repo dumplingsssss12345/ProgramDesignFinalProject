@@ -14,12 +14,16 @@ typedef struct Katana {
   Weapon base;               //武士刀基本資訊
   CollisionBox box;          //碰撞箱，用以進行碰撞檢定
   double attackAngle;        //武士刀的揮舞弧度
+  double maxAttackTime;        //攻擊持續時間
+  double curAttackTime;        //攻擊已持續時間
 
 }Katana;
 
+Katana* KatanaInit();                                    //武士刀的初始化函數
 void KatanaAttack(Weapon* self);                        //武士刀的攻擊函數
-void KatanaUpdate(Weapon* self, float deltaTime);       //武士刀的狀態更新函數
-void KatanaDestroy(Weapon* slef);                       //武士刀的銷毀函數
+void KatanaUpdate(Weapon* self, double deltaTime);       //武士刀的狀態更新函數
+void KatanaDestroy(Weapon* self);                       //武士刀的銷毀函數
+double CheckKatanaDemage(Weapon* self, struct CollisionBox* box); //武士刀的傷害碰撞函數
 
 #endif
 

@@ -19,5 +19,6 @@ LaserGun* LaserGunInit();                                        //雷射槍的�
 void LaserGunAttack(Weapon* self);                               //雷射槍的攻擊函數
 void LaserGunUpdate(Weapon* self, double deltaTime);             //雷射槍的狀態更新函數
 void LaserGunDestroy(Weapon* self);                              //雷射槍的銷毀函數
+double CheckLaserGunDemage(Weapon* self, struct CollisionBox* box); //雷射槍的傷害碰撞函數
 
 #endif

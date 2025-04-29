@@ -25,6 +25,7 @@ Whip* WhipInit() {
   whip->base.attack = WhipAttack;
   whip->base.update = WhipUpdate;
   whip->base.destroy = WhipDestroy;
+  whip->base.checkDemage = CheckWhipDemage;
 
   whip->maxAttackTime = 2.5f;
   whip->curAttackTime = 0.0f;
@@ -98,4 +99,15 @@ void WhipDestroy(Weapon *self) {
   Whip* whip = (Whip*)self;
 
   free(whip);
+}
+
+double CheckWhipDemage(Weapon *self, struct CollisionBox* box) {
+  Whip* whip = (Whip*)self;
+  double damage = 0.0f;
+
+  if(whip->base.isAttack && CheckCollsionBoxes(*box, whip->box)) {
+    damage += whip->base.attackPower;
+  }
+
+  return damage;
 }

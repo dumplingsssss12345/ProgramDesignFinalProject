@@ -91,6 +91,16 @@ void HeroUpdate(Hero *self, double deltaTime) {
   }
 }
 
+double CheckDemage(CollisionBox* box, Hero *self) {
+  double damage = 0.0f;
+
+  for(int i=0; i<self->weaponCount; i++) {
+    damage += self->weapons[i]->checkDemage(self->weapons[i], box);
+  }
+
+  return damage;
+}
+
 void HeroDestroy(Hero *self) {
   free(self);
 }
