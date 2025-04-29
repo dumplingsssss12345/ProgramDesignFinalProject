@@ -14,9 +14,15 @@
 #define CELL_SIZE 10
 
 // 爆炸效果設定
-#define MAX_EXPLOSIONS 10  // 同時存在的最大爆炸數量
-#define EXPLOSION_FRAMES 15  // 爆炸動畫的總幀數
-#define EXPLOSION_RADIUS 8  // 爆炸的半徑
+
+// 同時存在的最大爆炸數量
+#define MAX_EXPLOSIONS 10  
+
+// 爆炸動畫的總幀數
+#define EXPLOSION_FRAMES 15  
+
+// 爆炸的半徑
+#define EXPLOSION_RADIUS 8  
 // 爆炸結構
 typedef struct {
     CollisionBox box;
