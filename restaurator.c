@@ -1,0 +1,256 @@
+#include <stdio.h>
+#include <raylib.h>
+#include "weapon.h"
+#include "katana.h"
+#include "lasergun.h"
+#include "barrier.h"
+#include "whip.h"
+
+#include "hero.h"
+#include "warrior.h"
+#include "wizard.h"
+#include "archer.h"
+
+#include "basic_monster.h"
+#include "monster.h"
+
+#include "selectioninterface.h"
+
+void DrawProgressBar(int x, int y, int width, int height, float progress, Color bgColor, Color fgColor);
+void DrawGameUI(float time, int currentHP, int maxHP, int currentXP, int maxXP);
+
+int main() {
+  //初始化視窗
+  const int screenWidth = 1080;
+  const int screenHeight = 960;
+
+  InitWindow(screenWidth, screenHeight, "Restaurator");
+
+  SetTargetFPS(60);
+
+  while(!WindowShouldClose()) {
+    //顯示主畫面
+    int isExit = MainMenu();
+
+    //若選擇退出，直接關閉遊戲
+    if(isExit) {
+      break;
+    }
+
+    //選擇角色
+    int characterCode = CharacterSelectionInterface();
+    Hero* hero;
+
+    switch(characterCode) {
+      case 1:
+        hero = &WarriorInit()->base;        
+        break;
+
+      case 2:
+        hero = &WizardInit()->base;
+        break;
+
+      case 3:
+        hero = &ArcherInit()->base;
+        break;
+    }
+
+    //選擇武器
+    int weaponCode = WeaponSelectionInterfece();
+    Weapon* weapon;
+
+    switch (weaponCode) {
+      case 0:
+        break;
+      case 1:
+        weapon = &LaserGunInit()->base;
+        break;
+
+      case 2:
+        weapon = &KatanaInit()->base;
+        break;
+
+      case 3:
+        break;
+
+      case 4:
+        weapon = &WhipInit()->base;
+        break;
+
+      case 5:
+        weapon = &BarrierInit()->base;
+        break;
+    }
+
+    hero->weapons[0] = weapon;
+    hero->weaponCount = 1;
+
+    //主遊戲循環
+     
+    // 怪物初始化
+    spawn_monsters();
+    init_explosions();
+
+    //時間計算相關參數
+    // preTime代表上次取得的時間
+    // curTime代表遊戲運行後經過的時間
+    // nowTime代表現在時間
+    double preTime = GetTime(), curTime = 0, nowTime = preTime;
+    bool isHeroDead = 0, isHeroWin = 0;
+
+    //調整角色初始位置
+    hero->position.x = screenWidth/2;
+    hero->position.y = screenHeight/2;
+
+    //初始化攝影機
+    Camera2D camera = {0};
+    camera.target = (Vector2) {hero->position.x/2.0f, hero->position.y/2.0f};
+    camera.offset = (Vector2){screenWidth/2.0f, screenHeight/2.0f};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+    
+
+    while(curTime < 300.0f && !isHeroDead && !isHeroWin) {
+      //確認角色血量
+      if(hero->hp <= 0) {
+        isHeroDead = 1;
+      }
+      //時間更新
+      nowTime = GetTime();
+      double timeDiff = nowTime - preTime;
+      preTime = nowTime;
+
+      //測試用時的程式
+      // if(IsKeyPressed(KEY_W)) {
+      //   isHeroWin = true;
+      // }
+
+      // if(IsKeyPressed(KEY_L)) {
+      //   isHeroDead = true;
+      // }
+      // if(IsKeyPressed(KEY_T)) {
+      //   hero->exp = hero->nextLevelExp;
+      // }
+
+      //更新英雄狀態
+      hero->update(hero, timeDiff);
+
+      //更新遊戲時間
+      curTime += timeDiff;
+
+      //英雄移動
+      hero->move(hero);
+
+      //怪物向敵人移動
+      move_monsters_towards_player(hero);
+      // 
+      //攝影機調整至角色中心
+      camera.target = (Vector2) {hero->position.x/2.0f, hero->position.y/2.0f};
+
+      BeginDrawing();
+        //繪製背景
+        ClearBackground(WHITE);
+
+        //啟動攝影機模式
+        BeginMode2D(camera);
+
+          hero->draw(hero);
+          draw_monsters();
+          check_collision(hero);
+          get_demage(hero);
+
+        EndMode2D();
+
+
+        draw_explosions();
+
+        DrawGameUI(curTime, hero->hp, hero->maxHp,hero->exp, hero->nextLevelExp);
+
+      EndDrawing();
+
+    }
+
+    if(curTime >= 300.0f) {
+      isHeroWin = 1;
+    }
+
+    //勝利時呼叫勝利畫面
+    if(isHeroWin) {
+      isExit = VictoryScreen(curTime);
+    }
+
+    //死亡時呼叫死亡畫面
+    if(isHeroDead) {
+      isExit = DeathScreen(curTime);
+    }
+
+    if(isExit) {
+      break;
+    }
+  }
+
+  CloseWindow();
+
+}
+
+void DrawProgressBar(int x, int y, int width, int height, float progress, Color bgColor, Color fgColor) {
+    // 確保進度值在 0 到 1 之間
+    if (progress < 0.0f) progress = 0.0f;
+    if (progress > 1.0f) progress = 1.0f;
+
+    // 繪製背景矩形
+    DrawRectangle(x, y, width, height, bgColor);
+
+    // 計算前景矩形的寬度
+    int fgWidth = (int)(width * progress);
+
+    // 繪製前景矩形
+    DrawRectangle(x, y, fgWidth, height, fgColor);
+}
+
+void DrawGameUI(float time, int currentHP, int maxHP, int currentXP, int maxXP) {
+    // 定義常量
+    const int fontSize = 20;
+    const int barWidth = 200;
+    const int barHeight = 20;
+    const int padding = 10;
+
+    // 計算位置
+    int timerX = padding;
+    int timerY = padding;
+    int hpTextX = padding;
+    int hpTextY = timerY + fontSize + padding;
+    int hpBarX = padding + 150; // 留出文字空間
+    int hpBarY = hpTextY;
+    int xpTextX = padding;
+    int xpTextY = hpBarY + barHeight + padding;
+    int xpBarX = padding + 150;
+    int xpBarY = xpTextY;
+
+    // 繪製遊戲運行時間
+    int minutes = (int)time / 60;
+    int seconds = (int)time % 60;
+    DrawText(TextFormat("Time: %02d:%02d", minutes, seconds), timerX, timerY, fontSize, GREEN);
+
+    // 繪製 HP 文字
+    DrawText(TextFormat("HP: %d/%d", currentHP, maxHP), hpTextX, hpTextY, fontSize, GREEN);
+
+    // 繪製 HP 進度條
+    DrawRectangle(hpBarX, hpBarY, barWidth, barHeight, GRAY);
+    float hpRatio = (float)currentHP / maxHP;
+    if (hpRatio > 1.0f) hpRatio = 1.0f;
+    if (hpRatio < 0.0f) hpRatio = 0.0f;
+    int hpFillWidth = (int)(barWidth * hpRatio);
+    DrawRectangle(hpBarX, hpBarY, hpFillWidth, barHeight, RED);
+
+    // 繪製 XP 文字
+    DrawText(TextFormat("XP: %d/%d", currentXP, maxXP), xpTextX, xpTextY, fontSize, GREEN);
+
+    // 繪製 XP 進度條
+    DrawRectangle(xpBarX, xpBarY, barWidth, barHeight, GRAY);
+    float xpRatio = (float)currentXP / maxXP;
+    if (xpRatio > 1.0f) xpRatio = 1.0f;
+    if (xpRatio < 0.0f) xpRatio = 0.0f;
+    int xpFillWidth = (int)(barWidth * xpRatio);
+    DrawRectangle(xpBarX, xpBarY, xpFillWidth, barHeight, BLUE);
+}

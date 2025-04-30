@@ -383,7 +383,7 @@ void check_collision(Hero *hero) {
                 invincibility_timer = 60;
                 
                 // 玩家受到傷害 (新增)
-                hero->hp-=50;;
+                hero->hp-=2;
 
                 
                 // 如果玩家生命值歸零，直接返回
@@ -423,6 +423,9 @@ void get_demage(Hero* hero) {
                 // 標記怪物為非活躍
                 monsters[i].is_active = 0;
                 active_monster_count--;
+
+                //增加角色經驗值
+                hero->exp += 2;
                 
                 // 增加死亡怪物計數
                 dead_monster_count++;

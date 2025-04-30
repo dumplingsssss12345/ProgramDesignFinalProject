@@ -179,7 +179,7 @@ int PassiveSelectionInterfece()
                 btnColor = buttonHoverColor;
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    selectedPassive = i;
+                    selectedPassive = i + 1;
                     TraceLog(LOG_INFO, "Select passive ：%s", passives[i]);
                 }
             }
@@ -404,4 +404,195 @@ int CharacterSelectionInterface() {
     }
 
     return selectedCharacter;
+}
+
+int VictoryScreen(double gameTime) {
+    // 定義常量
+    const char* titleText = "Victory!";
+    const int fontSizeTitle = 30;
+    const int fontSizeText = 20;
+    const int buttonWidth = 200;
+    const int buttonHeight = 60;
+    const int horizontalButtonPadding = 30; // 按鈕間水平間距
+    const int verticalPadding = 20; // 文本元素間垂直間距
+
+    // 顏色
+    Color backgroundColor = BLACK;
+    Color buttonNormalColor = DARKBLUE;
+    Color buttonHoveredColor = BLUE;
+    Color buttonBorderColor = BLUE;
+    Color buttonTextColor = WHITE;
+    Color titleColor = BLUE;
+    Color textColor = WHITE;
+
+    // 獲取屏幕尺寸
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    // 計算 UI 總高度
+    float totalHeight = fontSizeTitle + 2 * verticalPadding + fontSizeText + buttonHeight;
+
+    // 計算起始 y 坐標以垂直居中
+    float y0 = (screenHeight - totalHeight) / 2.0f;
+
+    // 計算各元素 y 坐標
+    float titleY = y0;
+    float timeY = titleY + fontSizeTitle + verticalPadding;
+    float buttonsY = timeY + fontSizeText + verticalPadding;
+
+    // 計算按鈕 x 坐標
+    float totalButtonsWidth = 2 * buttonWidth + horizontalButtonPadding;
+    float leftX = (screenWidth - totalButtonsWidth) / 2.0f;
+
+    // 定義按鈕矩形
+    Rectangle restartButton = { leftX, buttonsY, (float)buttonWidth, (float)buttonHeight };
+    Rectangle quitButton = { leftX + buttonWidth + horizontalButtonPadding, buttonsY, (float)buttonWidth, (float)buttonHeight };
+
+    int selectedOption = -1; // -1: 未選擇, 0: 重新開始, 1: 退出
+    float time = 0.0f;
+
+    // 主循環
+    while (!WindowShouldClose() && selectedOption == -1) {
+        time += GetFrameTime();
+        Vector2 mousePoint = GetMousePosition();
+        int hoveredButton = -1;
+
+        // 檢查重新開始按鈕
+        if (CheckCollisionPointRec(mousePoint, restartButton)) {
+            hoveredButton = 0;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                selectedOption = 0; // 重新開始
+            }
+        }
+        // 檢查退出按鈕
+        else if (CheckCollisionPointRec(mousePoint, quitButton)) {
+            hoveredButton = 1;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                selectedOption = 1; // 退出
+            }
+        }
+
+        // 開始繪製
+        BeginDrawing();
+        ClearBackground(backgroundColor);
+
+        // 繪製標題（帶閃爍效果）
+        float alpha = 0.5f + 0.5f * sinf(time * 2.0f * PI);
+        Color pulsatingTitleColor = { titleColor.r, titleColor.g, titleColor.b, (unsigned char)(alpha * 255) };
+        int titleWidth = MeasureText(titleText, fontSizeTitle);
+        DrawText(titleText, screenWidth / 2 - titleWidth / 2, (int)titleY, fontSizeTitle, pulsatingTitleColor);
+
+        // 繪製遊戲完成時間
+        int minutes = (int)gameTime / 60;
+        int seconds = (int)gameTime % 60;
+        char timeText[50];
+        sprintf(timeText, "Time: %02d:%02d", minutes, seconds);
+        int timeWidth = MeasureText(timeText, fontSizeText);
+        DrawText(timeText, screenWidth / 2 - timeWidth / 2, (int)timeY, fontSizeText, textColor);
+
+        // 繪製重新開始按鈕
+        if (hoveredButton == 0) {
+            DrawRectangleRec(restartButton, buttonHoveredColor);
+        } else {
+            DrawRectangleRec(restartButton, buttonNormalColor);
+        }
+        DrawRectangleLinesEx(restartButton, 2, buttonBorderColor);
+        int restartTextWidth = MeasureText("Restart", fontSizeText);
+        DrawText("Restart", (int)(restartButton.x + restartButton.width / 2 - restartTextWidth / 2), (int)(restartButton.y + 15), fontSizeText, buttonTextColor);
+
+        // 繪製退出按鈕
+        if (hoveredButton == 1) {
+            DrawRectangleRec(quitButton, buttonHoveredColor);
+        } else {
+            DrawRectangleRec(quitButton, buttonNormalColor);
+        }
+        DrawRectangleLinesEx(quitButton, 2, buttonBorderColor);
+        int quitTextWidth = MeasureText("Quit", fontSizeText);
+        DrawText("Quit", (int)(quitButton.x + quitButton.width / 2 - quitTextWidth / 2), (int)(quitButton.y + 15), fontSizeText, buttonTextColor);
+
+        EndDrawing();
+    }
+
+    return selectedOption;
+}
+int MainMenu() {
+    // 定義常量
+    const char *titleText = "Restaurator";
+    const char *buttonNames[] = {"Start Game", "Quit Game"};
+    const int numButtons = 2;
+    const int buttonWidth = 200;
+    const int buttonHeight = 60;
+    const int buttonPadding = 20;
+
+    // 定義介面的顏色
+    Color backgroundColor = BLACK;
+    Color buttonNormalColor = MAROON;
+    Color buttonHoveredColor = RED;
+    Color buttonBorderColor = RED;
+    Color buttonTextColor = WHITE;
+    Color titleColor = RED;
+
+    // 獲取當前窗口尺寸
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    // 計算按鈕總高度並垂直居中
+    int totalHeight = numButtons * buttonHeight + (numButtons - 1) * buttonPadding;
+    int startingY = (screenHeight - totalHeight) / 2;
+
+    int hoveredButton = -1;
+    int selectedOption = -1;
+    float time = 0.0f;
+
+    // 主循環
+    while (!WindowShouldClose() && selectedOption == -1) {
+        time += GetFrameTime();
+        Vector2 mousePoint = GetMousePosition();
+        hoveredButton = -1;
+
+        // 檢查鼠標互動
+        for (int i = 0; i < numButtons; i++) {
+            float x = (screenWidth - buttonWidth) / 2.0f; // 按鈕水平居中
+            float y = startingY + i * (buttonHeight + buttonPadding);
+            Rectangle buttonRect = {x, y, buttonWidth, buttonHeight};
+
+            if (CheckCollisionPointRec(mousePoint, buttonRect)) {
+                hoveredButton = i;
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    selectedOption = i; // 0: 開始遊戲, 1: 退出遊戲
+                }
+            }
+        }
+
+        // 繪製UI
+        BeginDrawing();
+        ClearBackground(backgroundColor);
+
+        // 繪製標題
+        int titleWidth = MeasureText(titleText, 40);
+        float alpha = 0.5f + 0.5f * sinf(time * 2.0f * PI);
+        Color pulsatingTitleColor = {titleColor.r, titleColor.g, titleColor.b, (unsigned char)(alpha * 255)};
+        DrawText(titleText, screenWidth / 2 - titleWidth / 2, 100, 40, pulsatingTitleColor);
+
+        // 繪製按鈕
+        for (int i = 0; i < numButtons; i++) {
+            float x = (screenWidth - buttonWidth) / 2.0f;
+            float y = startingY + i * (buttonHeight + buttonPadding);
+            Rectangle buttonRect = {x, y, buttonWidth, buttonHeight};
+
+            if (i == hoveredButton) {
+                DrawRectangleRec(buttonRect, buttonHoveredColor);
+            } else {
+                DrawRectangleRec(buttonRect, buttonNormalColor);
+            }
+            DrawRectangleLinesEx(buttonRect, 2, buttonBorderColor);
+
+            int textWidth = MeasureText(buttonNames[i], 20);
+            DrawText(buttonNames[i], buttonRect.x + buttonRect.width / 2 - textWidth / 2, buttonRect.y + 15, 20, buttonTextColor);
+        }
+
+        EndDrawing();
+    }
+
+    return selectedOption;
 }

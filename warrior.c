@@ -10,10 +10,11 @@ Warrior* WarriorInit() {
     heroName,            
     (Vector2){0,0},
     LoadTexture("resources/hero/warrior.png"),
-    100.0f,
-    2.0f,
-    100.0f,
-    50.0f
+    100.0f,                                         //角色攻擊力
+    2.0f,                                           //角色速度
+    100.0f,                                         //角色血量
+    0.01f,                                          //角色血量回復速度
+    50.0f                                          //角色拾取範圍
     );
 
   Warrior* warrior = (Warrior*)malloc(sizeof(Warrior));

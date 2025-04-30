@@ -4,7 +4,7 @@
 #include "archer.h"
 #include "lasergun.h"
 
-Archer* ArcherInit() {
+Archer* ArcherInit(Weapon* weapon) {
   char heroName[51] = "archer";
   Hero* base = HeroInit(
     heroName,                                            //角色姓名        
@@ -13,6 +13,7 @@ Archer* ArcherInit() {
     30.0f,                                              //角色攻擊力
     3.0f,                                                //角色速度
     40.0f,                                              //角色血量
+    0.1f,                                                //角色血量回復速度
     40.0f                                                //拾取範圍
     );
 

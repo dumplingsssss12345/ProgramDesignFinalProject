@@ -17,6 +17,7 @@ typedef struct Hero{
   unsigned int weaponCount;        //英雄目前的武器數量，上限為6
 
   double speed;                    //英雄的移動速度
+  double maxHp;                    //英雄的血量上限
   double hp;                       //英雄的血量
   double attackPower;              //角色攻擊力
   double pickupRadius;             //英雄的拾取半徑
@@ -31,7 +32,7 @@ typedef struct Hero{
   void (*destroy)(struct Hero* self);                  //角色銷毀函數,將角色從記憶體中刪除
 }Hero;
 
-Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attackPower, double speed, double hp, double pickRadius);   //角色初始化函數
+Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attackPower, double speed, double maxHp, double hpRecoveryRate, double pickRadius);   //角色初始化函數
 
 void HeroMove(Hero* self);                                   //依照輸入決定角色移動
 void HeroDraw(Hero* self);                                   //繪製角色貼圖

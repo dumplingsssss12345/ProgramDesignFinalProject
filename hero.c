@@ -5,7 +5,7 @@
 #include "collisionbox.h"
 #include "weapon.h"
 #include "selectioninterface.h"
-Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attackPower, double speed, double hp, double pickupRadius) {
+Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attackPower, double speed, double maxHp, double hpRecoveryRate, double pickupRadius) {
   Hero* hero = (Hero*)malloc(sizeof(Hero));
 
   strcpy(hero->name, name);
@@ -22,8 +22,13 @@ Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attack
 
   hero->attackPower = attackPower;
   hero->speed = speed;
-  hero->hp = hp;
+  hero->maxHp = maxHp;
+  hero->hp = maxHp;
   hero->pickupRadius = pickupRadius; 
+  hero->hpRecoveryRate = hpRecoveryRate;
+  hero->level = 1;
+  hero->exp = 0;
+  hero->nextLevelExp = 50;
 
   hero->move = HeroMove;
   hero->draw = HeroDraw;
@@ -75,7 +80,7 @@ void HeroDraw(Hero* self) {
 void HeroUpdate(Hero *self, double deltaTime) {
   // 【1】回血
     self->hp += self->hpRecoveryRate * deltaTime;
-    if (self->hp > 100.0f) self->hp = 100.0f; // 假設最大血量100
+    if (self->hp > self->maxHp) self->hp = self->maxHp; // 假設最大血量100
 
     // 【2】經驗值升級檢查
     if (self->exp >= self->nextLevelExp) {
