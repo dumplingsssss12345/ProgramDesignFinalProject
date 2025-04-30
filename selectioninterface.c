@@ -307,3 +307,101 @@ int DeathScreen(int score) {
 
     return selectedOption;
 }
+
+int CharacterSelectionInterface() {
+    // 角色名稱和描述
+    const char *characterNames[] = {
+        "Warrior", "Wizard", "Archer"
+    };
+
+    const char *characterDescriptions[] = {
+        "Warrior: A melee fighter with high strength",
+        "Wizard: A mage skilled in ranged magic attacks",
+        "Archer: A sharpshooter with precise ranged attacks"
+    };
+
+    // 按鈕參數
+    const int numButtons = 3;
+    const int buttonWidth = 200;
+    const int buttonHeight = 60;
+    const int buttonPadding = 20;
+
+    // 定義介面的顏色
+    Color backgroundColor = BLACK;
+    Color buttonNormalColor = MAROON;
+    Color buttonHoveredColor = RED;
+    Color buttonBorderColor = RED;
+    Color buttonTextColor = WHITE;
+    Color descriptionTextColor = YELLOW;
+
+    // 獲取當前窗口尺寸
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    // 計算按鈕總高度並垂直居中
+    int totalHeight = numButtons * buttonHeight + (numButtons - 1) * buttonPadding;
+    int startingY = (screenHeight - totalHeight) / 2;
+
+    int hoveredButton = -1;
+    int selectedCharacter = -1;
+    float time = 0.0f;
+
+    // 選擇循環
+    while (!WindowShouldClose() && selectedCharacter == -1) {
+        time += GetFrameTime();
+        Vector2 mousePoint = GetMousePosition();
+        hoveredButton = -1;
+
+        // 檢查鼠標互動
+        for (int i = 0; i < numButtons; i++) {
+            float x = (screenWidth - buttonWidth) / 2.0f; // 按鈕水平居中
+            float y = startingY + i * (buttonHeight + buttonPadding);
+            Rectangle buttonRect = {x, y, buttonWidth, buttonHeight};
+
+            if (CheckCollisionPointRec(mousePoint, buttonRect)) {
+                hoveredButton = i;
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    selectedCharacter = i + 1; // 返回 1, 2, 或 3
+                }
+            }
+        }
+
+        // 繪製UI
+        BeginDrawing();
+        ClearBackground(backgroundColor);
+
+        // 繪製標題
+        const char *titleText = "Choose Your Character";
+        int titleWidth = MeasureText(titleText, 30);
+        float alpha = 0.5f + 0.5f * sinf(time * 2.0f * PI);
+        Color titleColor = {descriptionTextColor.r, descriptionTextColor.g, descriptionTextColor.b, (unsigned char)(alpha * 255)};
+        DrawText(titleText, screenWidth / 2 - titleWidth / 2, 50, 30, titleColor);
+
+        // 繪製按鈕
+        for (int i = 0; i < numButtons; i++) {
+            float x = (screenWidth - buttonWidth) / 2.0f;
+            float y = startingY + i * (buttonHeight + buttonPadding);
+            Rectangle buttonRect = {x, y, buttonWidth, buttonHeight};
+
+            if (i == hoveredButton) {
+                DrawRectangleRec(buttonRect, buttonHoveredColor);
+            } else {
+                DrawRectangleRec(buttonRect, buttonNormalColor);
+            }
+            DrawRectangleLinesEx(buttonRect, 2, buttonBorderColor);
+
+            int textWidth = MeasureText(characterNames[i], 20);
+            DrawText(characterNames[i], buttonRect.x + buttonRect.width / 2 - textWidth / 2, buttonRect.y + 15, 20, buttonTextColor);
+        }
+
+        // 繪製描述
+        if (hoveredButton != -1) {
+            int descWidth = MeasureText(characterDescriptions[hoveredButton], 20);
+            DrawText(characterDescriptions[hoveredButton], screenWidth / 2 - descWidth / 2, screenHeight - 100, 20, descriptionTextColor);
+        }
+
+        EndDrawing();
+    }
+
+    return selectedCharacter;
+}

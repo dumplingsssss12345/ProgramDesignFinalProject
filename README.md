@@ -2,6 +2,21 @@
 
 ## Characters
 
+### Warrior
+戰士擁有高傷害和高血量,但是移動速度較低
+
+![](resources/hero/warrior.png)
+
+### Wizard
+巫師的具有中等程度的攻擊力、血量和移動速度
+
+![](resources/hero/wizard.png)
+
+### Archer
+弓箭手的攻擊力和血量較低，但是移動速度最高
+
+![](resources/hero/archer.png)
+
 ## Weapons
 
 ### Fireball
