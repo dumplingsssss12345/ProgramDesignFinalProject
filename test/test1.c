@@ -1,8 +1,8 @@
 #include <raylib.h>
 #include <stdio.h>
-#include "weapon.h"
-#include "warrior.h"
-#include "katana.h"
+#include "../weapon.h"
+#include "../warrior.h"
+#include "../katana.h"
 
 
 int main() {

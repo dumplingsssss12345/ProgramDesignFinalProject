@@ -1,4 +1,5 @@
 #include "selectioninterface.h"
+#include <stdio.h>
 #include <raylib.h>
 #include <math.h>
 
@@ -196,4 +197,113 @@ int PassiveSelectionInterfece()
     }
 
     return selectedPassive;
+}
+
+int DeathScreen(int score) {
+    // 定義常量
+    const char* titleText = "Game Over";
+    const int fontSizeTitle = 30;
+    const int fontSizeText = 20;
+    const int buttonWidth = 200;
+    const int buttonHeight = 60;
+    const int horizontalButtonPadding = 30; // 按鈕間水平間距
+    const int verticalPadding = 20; // 文本元素間垂直間距
+
+    // 顏色
+    Color backgroundColor = BLACK;
+    Color buttonNormalColor = DARKGRAY;
+    Color buttonHoveredColor = RED;
+    Color buttonBorderColor = RED;
+    Color buttonTextColor = WHITE;
+    Color titleColor = RED;
+    Color textColor = YELLOW;
+
+    // 獲取屏幕尺寸
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    // 計算 UI 總高度
+    float totalHeight = fontSizeTitle + 3 * verticalPadding + 2 * fontSizeText + buttonHeight;
+
+    // 計算起始 y 坐標以垂直居中
+    float y0 = (screenHeight - totalHeight) / 2.0f;
+
+    // 計算各元素 y 坐標
+    float titleY = y0;
+    float deathY = titleY + fontSizeTitle + verticalPadding;
+    float scoreY = deathY + fontSizeText + verticalPadding;
+    float buttonsY = scoreY + fontSizeText + verticalPadding;
+
+    // 計算按鈕 x 坐標
+    float totalButtonsWidth = 2 * buttonWidth + horizontalButtonPadding;
+    float leftX = (screenWidth - totalButtonsWidth) / 2.0f;
+
+    // 定義按鈕矩形
+    Rectangle restartButton = { leftX, buttonsY, (float)buttonWidth, (float)buttonHeight };
+    Rectangle quitButton = { leftX + buttonWidth + horizontalButtonPadding, buttonsY, (float)buttonWidth, (float)buttonHeight };
+
+    int selectedOption = -1; // -1: 未選擇, 0: 重新開始, 1: 退出
+    float time = 0.0f;
+
+    // 主循環
+    while (!WindowShouldClose() && selectedOption == -1) {
+        time += GetFrameTime();
+        Vector2 mousePoint = GetMousePosition();
+        int hoveredButton = -1;
+
+        // 檢查重新開始按鈕
+        if (CheckCollisionPointRec(mousePoint, restartButton)) {
+            hoveredButton = 0;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                selectedOption = 0; // 重新開始
+            }
+        }
+        // 檢查退出按鈕
+        else if (CheckCollisionPointRec(mousePoint, quitButton)) {
+            hoveredButton = 1;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                selectedOption = 1; // 退出
+            }
+        }
+
+        // 開始繪製
+        BeginDrawing();
+        ClearBackground(backgroundColor);
+
+        // 繪製標題（帶閃爍效果）
+        float alpha = 0.5f + 0.5f * sinf(time * 2.0f * PI);
+        Color pulsatingTitleColor = { titleColor.r, titleColor.g, titleColor.b, (unsigned char)(alpha * 255) };
+        int titleWidth = MeasureText(titleText, fontSizeTitle);
+        DrawText(titleText, screenWidth / 2 - titleWidth / 2, (int)titleY, fontSizeTitle, pulsatingTitleColor);
+
+        // 繪製得分
+        char scoreText[50];
+        sprintf(scoreText, "Score: %d", score);
+        int scoreWidth = MeasureText(scoreText, fontSizeText);
+        DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, (int)scoreY, fontSizeText, textColor);
+
+        // 繪製重新開始按鈕
+        if (hoveredButton == 0) {
+            DrawRectangleRec(restartButton, buttonHoveredColor);
+        } else {
+            DrawRectangleRec(restartButton, buttonNormalColor);
+        }
+        DrawRectangleLinesEx(restartButton, 2, buttonBorderColor);
+        int restartTextWidth = MeasureText("Restart", fontSizeText);
+        DrawText("Restart", (int)(restartButton.x + restartButton.width / 2 - restartTextWidth / 2), (int)(restartButton.y + 15), fontSizeText, buttonTextColor);
+
+        // 繪製退出按鈕
+        if (hoveredButton == 1) {
+            DrawRectangleRec(quitButton, buttonHoveredColor);
+        } else {
+            DrawRectangleRec(quitButton, buttonNormalColor);
+        }
+        DrawRectangleLinesEx(quitButton, 2, buttonBorderColor);
+        int quitTextWidth = MeasureText("Quit", fontSizeText);
+        DrawText("Quit", (int)(quitButton.x + quitButton.width / 2 - quitTextWidth / 2), (int)(quitButton.y + 15), fontSizeText, buttonTextColor);
+
+        EndDrawing();
+    }
+
+    return selectedOption;
 }

@@ -1,10 +1,10 @@
 #include <raylib.h>
 #include <stdio.h>
-#include "basic_monster.h"
-#include "monster.h"
-#include "weapon.h"
-#include "warrior.h"
-#include "lasergun.h"
+#include "../basic_monster.h"
+#include "../monster.h"
+#include "../weapon.h"
+#include "../warrior.h"
+#include "../lasergun.h"
 
 int main() {
   const int screenWidth = 800;

@@ -47,5 +47,6 @@ void add_monsters(Hero *hero);//新增新的怪物
 void replace_missing_monsters(Hero *hero);//檢查並替換消失的怪物
 void check_collision(Hero *hero);//檢查怪物和玩家的碰撞
 void draw_monsters();
+void get_demage(Hero* hero);
 
 #endif

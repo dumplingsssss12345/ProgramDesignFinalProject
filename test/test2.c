@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "monster.h"
+#include "../monster.h"
 
 int main() {
   InitWindow(400, 800, "test2");
