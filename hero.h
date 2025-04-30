@@ -20,6 +20,10 @@ typedef struct Hero{
   double hp;                       //英雄的血量
   double attackPower;              //角色攻擊力
   double pickupRadius;             //英雄的拾取半徑
+  double hpRecoveryRate; // 每秒回血量
+  int level;             // 等級
+  int exp;               // 經驗值
+  int nextLevelExp;      // 升下個等級需要的經驗值
 
   void (*move)(struct Hero* self);                     //角色移動
   void (*draw)(struct Hero* self);                     //角色的繪製函數
