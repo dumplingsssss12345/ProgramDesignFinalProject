@@ -85,8 +85,7 @@ int main() {
     hero->weapons[0] = weapon;
     hero->weaponCount = 1;
 
-    //主遊戲循環
-     
+    //主遊戲部份
     // 怪物初始化
     spawn_monsters();
     init_explosions();
@@ -110,6 +109,7 @@ int main() {
     camera.zoom = 1.0f;
     
 
+    //主遊戲循環
     while(curTime < 300.0f && !isHeroDead && !isHeroWin) {
       //確認角色血量
       if(hero->hp <= 0) {
@@ -140,6 +140,11 @@ int main() {
 
       //英雄移動
       hero->move(hero);
+
+      //新增敵人
+      replace_missing_monsters(hero);
+      add_monsters(hero);
+
 
       //怪物向敵人移動
       move_monsters_towards_player(hero);
