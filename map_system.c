@@ -1,8 +1,7 @@
 #include "raylib.h"
 #include "map_system.h"
+#include "hero.h"
 
-//外部變量 玩家位置
-extern Vector2 player;
 
 static Texture2D islandmap = {0};
 static Texture2D grassland = {0};
@@ -14,7 +13,7 @@ static const int textureSize = 1024;
 
 
 
-void map_is_island() {
+void map_is_island(Hero* hero) {
     //加載紋理1次
     if (!islandLoaded) {
         islandmap = LoadTexture("resources/map/island.png");
@@ -23,8 +22,8 @@ void map_is_island() {
 
     
 
-    int centerX = (int)(player.x / textureSize);
-    int centerY = (int)(player.y / textureSize);
+    int centerX = (int)(hero->position.x / textureSize);
+    int centerY = (int)(hero->position.y / textureSize);
 
     // 畫4*4個格子圍繞玩家
     for (int i = -2; i <= 1; i++) {
@@ -36,15 +35,15 @@ void map_is_island() {
     }
 }
 
-void map_is_grassland() {
+void map_is_grassland(Hero* hero) {
     //加載紋理1次
     if (!grasslandLoaded) {
         grassland = LoadTexture("resources/map/grassland.png");
         grasslandLoaded = true;
     }
 
-    int centerX = (int)(player.x / textureSize);
-    int centerY = (int)(player.y / textureSize);
+    int centerX = (int)(hero->position.x / textureSize);
+    int centerY = (int)(hero->position.y / textureSize);
 
     // 畫4*4個格子圍繞玩家
     for (int i = -2; i <= 1; i++) {
@@ -56,15 +55,15 @@ void map_is_grassland() {
     }
 }
 
-void map_is_volcano() {
+void map_is_volcano(Hero* hero) {
     //加載紋理1次
     if (!volcanoLoaded) {
         volcano = LoadTexture("resources/map/volcano.png");
         volcanoLoaded = true;
     }
 
-    int centerX = (int)(player.x / textureSize);
-    int centerY = (int)(player.y / textureSize);
+    int centerX = (int)(hero->position.x / textureSize);
+    int centerY = (int)(hero->position.y / textureSize);
 
     // 畫4*4個格子圍繞玩家
     for (int i = -2; i <= 1; i++) {
