@@ -10,6 +10,7 @@ int DeathScreen(int score);          //叫出死亡顯示界面
 int VictoryScreen(double gameTime);
 
 int CharacterSelectionInterface();   //叫出武器選擇界面
+int MapSelectionInterface();         //叫出地圖選擇界面
 
 int MainMenu();                      //叫出主頁面
 

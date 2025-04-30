@@ -14,6 +14,7 @@
 #include "basic_monster.h"
 #include "monster.h"
 
+#include "map_system.h"
 #include "selectioninterface.h"
 
 void DrawProgressBar(int x, int y, int width, int height, float progress, Color bgColor, Color fgColor);
@@ -35,6 +36,24 @@ int main() {
     //若選擇退出，直接關閉遊戲
     if(isExit) {
       break;
+    }
+
+    //地圖選擇
+    Map* map;
+    int mapCode = MapSelectionInterface();
+
+    switch (mapCode) {
+      case 1:
+        map = MapInit(LoadTexture("resources/map/grassland.png"));
+        break;
+
+      case 2:
+        map = MapInit(LoadTexture("resources/map/island.png"));
+        break;
+
+      case 3:
+        map = MapInit(LoadTexture("resources/map/volcano.png"));
+        break;
     }
 
     //選擇角色
@@ -132,8 +151,6 @@ int main() {
       //   hero->exp = hero->nextLevelExp;
       // }
 
-      //更新英雄狀態
-      hero->update(hero, timeDiff);
 
       //更新遊戲時間
       curTime += timeDiff;
@@ -154,11 +171,13 @@ int main() {
 
       BeginDrawing();
         //繪製背景
-        ClearBackground(WHITE);
+        DrawMap(map, hero);
 
         //啟動攝影機模式
         BeginMode2D(camera);
 
+          //更新英雄狀態
+          hero->update(hero, timeDiff);
           hero->draw(hero);
           draw_monsters();
           check_collision(hero);
