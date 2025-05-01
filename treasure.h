@@ -21,10 +21,10 @@ typedef struct {
 void Treasure_InitSystem(void);
 
 // 怪物被擊殺時呼叫，負責計數與生成寶箱
-void Treasure_OnMonsterKilled(void);
+void Treasure_OnMonsterKilled(Hero* hero);
 
 // 每幀更新寶箱狀態，處理玩家碰撞與開啟寶箱
-void Treasure_Update(Hero* hero);
+int Treasure_Update(Hero* hero);
 
 // 繪製所有寶箱
 void Treasure_DrawAll(void);

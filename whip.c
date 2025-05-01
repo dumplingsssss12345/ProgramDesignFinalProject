@@ -13,7 +13,7 @@ Whip* WhipInit() {
     weaponName,                                      //武器名稱
     LoadTexture("resources/weapon/whip.png"),        //武器貼圖
     30.f,                                            //攻擊力
-    1.5f,                                            //攻擊範圍
+    1.0f,                                            //攻擊範圍
     20.0f,                                           //攻擊速度
     2.5f,                                            //冷卻時間
     (Vector2){0,0}                                   //初始位置

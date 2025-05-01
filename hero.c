@@ -10,7 +10,6 @@ Hero* HeroInit(char name[51], Vector2 position, Texture2D texture, double attack
   Hero* hero = (Hero*)malloc(sizeof(Hero));
 
   strcpy(hero->name, name);
-  hero->hpRecoveryRate = 0.0;
   hero->level = 1; 
   hero->exp = 0;
   hero->nextLevelExp = 100;  // 需要100經驗值升級
@@ -97,13 +96,12 @@ void HeroUpdate(Hero *self, double deltaTime) {
             self->hpRecoveryRate += 1.0f; // 生命回復速度增加
         }
         else if (selectedPassive == 1) {
-            for (int i = 0; i < self->weaponCount; i++) {
-                self->weapons[i]->attackRange *= 1.2f; // 射程 +20%
-            }
+          self->maxHp *= 1.2f;            //最大生命值加20%
+          self->hp *= 1.2f;
         }
         else if (selectedPassive == 2) {
             for (int i = 0; i < self->weaponCount; i++) {
-                self->weapons[i]->attackPower *= 1.2f; // 攻擊力 +20%
+                self->weapons[i]->attackPower*= 1.2f; // 攻擊力 +20%
             }
         }
     }

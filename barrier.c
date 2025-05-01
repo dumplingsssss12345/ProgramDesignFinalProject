@@ -4,6 +4,8 @@
 #include "weapon.h"
 #include "barrier.h"
 
+#define BARRIER_OFFSET -20.0f
+
 Barrier* BarrierInit() {
   Barrier* barrier = (Barrier*)malloc(sizeof(Barrier));
   char weaponName[51] = "Barrier";
@@ -12,7 +14,7 @@ Barrier* BarrierInit() {
     weaponName,                                            //武器名稱
     LoadTexture("resources/weapon/barrier.png"),           //武器貼圖
     5.0f,                                                  //攻擊力
-    2.0f,                                                  //攻擊範圍
+    1.0f,                                                  //攻擊範圍
     20.0f,                                                 //攻擊速度
     0.0f,                                                  //冷卻時間
     (Vector2){0,0}                                         //初始位置
@@ -27,10 +29,10 @@ Barrier* BarrierInit() {
   barrier->base.checkDemage = CheckBarrierDemage;
 
   barrier->circleCenter = (Vector2) {
-    barrier->base.position.x + barrier->base.texture.width/2.0f + 180.0f,
-    barrier->base.position.y + barrier->base.texture.height/2.0f + 180.0f,
+    barrier->base.position.x + barrier->base.texture.width/2.0f + BARRIER_OFFSET,
+    barrier->base.position.y + barrier->base.texture.height/2.0f + BARRIER_OFFSET,
   };
-  barrier->radius = 360.0f;
+  barrier->radius = 200.0f;
 
   return barrier;
 }
@@ -47,11 +49,12 @@ void BarrierUpdate(Weapon* self, double deltaTime) {
 
   //調整圓心位置
   barrier->circleCenter = (Vector2) {
-    barrier->base.position.x + barrier->base.texture.width/2.0f + 180.0f,
-    barrier->base.position.y + barrier->base.texture.height/2.0f + 180.0f,
+    barrier->base.position.x + barrier->base.texture.width/2.0f + BARRIER_OFFSET,
+    barrier->base.position.y + barrier->base.texture.height/2.0f + BARRIER_OFFSET,
   };
 
   //調整圓的半徑
+  // barrier->radius *= barrier->base.attackRange;
 
   barrier->base.attack(&barrier->base);
 }

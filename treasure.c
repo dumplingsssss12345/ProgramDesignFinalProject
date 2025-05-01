@@ -11,6 +11,8 @@
 static Treasure treasures[MAX_TREASURES];
 static int treasure_count = 0;
 
+static int needed_dead_monster = 30;
+
 // 初始化寶箱系統
 void Treasure_InitSystem(void) {
     srand((unsigned int)time(NULL));
@@ -20,8 +22,8 @@ void Treasure_InitSystem(void) {
 // 隨機產生寶箱位置
 static Vector2 Treasure_GetRandomPositionNearPlayer(const Hero* hero) {
     // 設定寶箱生成距離範圍 100~200 像素
-    const float min_dist = 100.0f;
-    const float max_dist = 200.0f;
+    const float min_dist = 300.0f;
+    const float max_dist = 400.0f;
 
     // 隨機角度
     float angle = ((float)rand() / RAND_MAX) * 2.0f * PI;
@@ -57,12 +59,13 @@ Treasure Treasure_Init(Vector2 position, Texture2D closedTex, Texture2D openedTe
 
 
 // 怪物被擊殺時呼叫，達30隻生成寶箱
-void Treasure_OnMonsterKilled(const Hero* hero) {
-    if (dead_monster_count % 30 == 0 && treasure_count < MAX_TREASURES) {
+void Treasure_OnMonsterKilled(Hero* hero) {
+    if (dead_monster_count >= needed_dead_monster && treasure_count < MAX_TREASURES) {
         Vector2 pos = Treasure_GetRandomPositionNearPlayer(hero);
         Texture2D closedTex = LoadTexture("closedtreasure.png");
         Texture2D openedTex = LoadTexture("openedtreasure.png");
         treasures[treasure_count++] = Treasure_Init(pos, closedTex, openedTex);
+        needed_dead_monster += 30;
     }
 }
 
@@ -74,17 +77,20 @@ static bool Treasure_CheckCollision(const Treasure* treasure, Vector2 player_pos
 }
 
 // 更新所有寶箱狀態，處理玩家碰撞與武器選擇
-void Treasure_Update(Hero* hero) {
+int Treasure_Update(Hero* hero) {
+    int weaponCode = -1;
     for (int i = 0; i < treasure_count; i++) {
         if (!treasures[i].is_opened && Treasure_CheckCollision(&treasures[i], hero->position, hero->pickupRadius)) {
             treasures[i].is_opened = true;
 
             // 呼叫武器選擇介面，等待玩家選擇武器
-            int weapon_idx = WeaponSelectionInterfece();
+            weaponCode = WeaponSelectionInterfece();
             
             
         }
     }
+
+    return weaponCode;
 }
 
 //繪製寶箱

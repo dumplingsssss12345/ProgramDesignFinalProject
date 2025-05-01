@@ -82,7 +82,7 @@ int WeaponSelectionInterfece() {
         for (int i = 0; i < 6; i++) {
             int row = i % num_rows;
             int col = i / num_rows;
-            float x = (col == 0) ? 50 : (screenWidth - 50 - button_width);
+            float x = (col == 0) ? 100 : (screenWidth - 100 - button_width);
             float y = starting_y + row * (button_height + button_padding);
             Rectangle buttonRect = {x, y, button_width, button_height};
 

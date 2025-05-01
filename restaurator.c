@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <raylib.h>
 #include "weapon.h"
 #include "katana.h"
@@ -14,6 +13,7 @@
 #include "basic_monster.h"
 #include "monster.h"
 
+#include "treasure.h"
 #include "map_system.h"
 #include "selectioninterface.h"
 
@@ -109,6 +109,9 @@ int main() {
     spawn_monsters(hero);
     init_explosions();
 
+    //寶箱初始化
+    Treasure_InitSystem();
+
     //時間計算相關參數
     // preTime代表上次取得的時間
     // curTime代表遊戲運行後經過的時間
@@ -172,6 +175,7 @@ int main() {
         //繪製背景
         DrawMap(map, hero);
 
+
         //啟動攝影機模式
         BeginMode2D(camera);
 
@@ -179,14 +183,57 @@ int main() {
           hero->update(hero, timeDiff);
           hero->draw(hero);
           draw_monsters();
+
           check_collision(hero);
           get_demage(hero);
 
+          update_explosion();
+
+          draw_explosions();
+
+          Treasure_DrawAll();
+
+          weaponCode = Treasure_Update(hero);
+          Weapon* newWepon;
+
+          if(hero->weaponCount <= 6) {
+            switch (weaponCode) {
+              case 0:
+                break;
+              case 1:
+                hero->weapons[hero->weaponCount] = &LaserGunInit()->base;
+                hero->weaponCount++;
+                break;
+
+              case 2:
+                hero->weapons[hero->weaponCount] = &KatanaInit()->base;
+                hero->weaponCount++;
+                break;
+
+              case 3:
+                break;
+
+              case 4:
+                hero->weapons[hero->weaponCount] = &WhipInit()->base;
+                hero->weaponCount++;
+                break;
+
+              case 5:
+                hero->weapons[hero->weaponCount] = &BarrierInit()->base;
+                hero->weaponCount++;
+                break;
+
+              default:
+                break;
+            }
+            
+          }
+
+
+
         EndMode2D();
-
-
-        draw_explosions();
-
+    
+        //畫出遊戲的UI
         DrawGameUI(curTime, hero->hp, hero->maxHp,hero->exp, hero->nextLevelExp);
 
       EndDrawing();

@@ -9,8 +9,8 @@ int dy[4] = {0, 0, -1, 1};
 Vector2 random_empty_position(Hero *hero) {
     double x = hero->position.x;
     double y =hero->position.y;
-    double minDistance = 50;
-    double maxDistance = 70;
+    double minDistance = 1000;
+    double maxDistance = 1200;
     // do {
     //     pos->x = rand() % (MAP_HEIGHT - 1);  // 減1確保有足夠空間放置2x2怪物
     //     pos->y = rand() % (MAP_WIDTH - 1);   // 減1確保有足夠空間放置2x2怪物
@@ -58,6 +58,19 @@ void init_explosions() {
     }
 }
 
+//更新爆炸
+void update_explosion() {
+    for(int i=0; i< MAX_EXPLOSIONS; i++) {
+        if (explosions[i].is_active) {
+            explosions[i].frame++;
+        }
+
+        if(explosions[i].frame >= EXPLOSION_FRAMES) {
+            explosions[i].is_active = false;
+        }
+    }
+}
+
 // 創建新的爆炸
 void create_explosion(int x, int y, Color color) {
     for (int i = 0; i < MAX_EXPLOSIONS; i++) {
@@ -100,24 +113,24 @@ void draw_explosions() {
             inner_color.a = 200;
             
             // 绘制由外到内三个圆圈
-            DrawCircle(explosions[i].y * CELL_SIZE + CELL_SIZE/2, 
-                      explosions[i].x * CELL_SIZE + CELL_SIZE/2, 
+            DrawCircle(explosions[i].x + 1/2 , 
+                      explosions[i].y + 1/2, 
                       radius * CELL_SIZE, outer_color);
                       
-            DrawCircle(explosions[i].y * CELL_SIZE + CELL_SIZE/2, 
-                      explosions[i].x * CELL_SIZE + CELL_SIZE/2, 
+            DrawCircle(explosions[i].x + 1/2 , 
+                      explosions[i].y + 1/2, 
                       radius * CELL_SIZE * 0.7f, mid_color);
                       
-            DrawCircle(explosions[i].y * CELL_SIZE + CELL_SIZE/2, 
-                      explosions[i].x * CELL_SIZE + CELL_SIZE/2, 
+            DrawCircle(explosions[i].x + 1/2, 
+                      explosions[i].y + 1/2, 
                       radius * CELL_SIZE * 0.4f, inner_color);
                       
             // 在爆炸中心添加几个小圆点，增加爆炸感
             for (int j = 0; j < 8; j++) {
                 float angle = j * (2 * PI / 8);
                 float distance = radius * CELL_SIZE * 0.6f;
-                float x = explosions[i].y * CELL_SIZE + CELL_SIZE/2 + cosf(angle) * distance;
-                float y = explosions[i].x * CELL_SIZE + CELL_SIZE/2 + sinf(angle) * distance;
+                float x = explosions[i].x + 1/2 + cosf(angle) * distance;
+                float y = explosions[i].y + 1/2 + sinf(angle) * distance;
                 
                 DrawCircle(x, y, CELL_SIZE * 0.2f, WHITE);
             }

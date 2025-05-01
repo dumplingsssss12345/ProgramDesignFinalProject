@@ -54,8 +54,6 @@ void KatanaAttack(Weapon *self) {
   
   //繪製攻擊特效
   DrawTextureEx(katana->base.texture, katana->base.position, katana->attackAngle, katana->base.attackRange, WHITE);
-
-  DrawRectanglePro(katana->box.rec, (Vector2){katana->box.rec.x, katana->box.rec.y}, katana->box.rotationAngle, RED);
 }
 
 void KatanaUpdate(Weapon *self, double deltaTime) {

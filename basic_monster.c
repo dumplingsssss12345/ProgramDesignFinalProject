@@ -1,6 +1,7 @@
 #include"basic_monster.h"
 #include "hero.h"
 #include "monster.h"
+#include "treasure.h"
 #include <raylib.h>
 
 float pre_game_time = 0.0f;
@@ -162,31 +163,31 @@ void move_monsters_towards_player(Hero *hero) {
         // }
 
         // 檢查怪物間是否相撞
-        // for (int j = 0; j < current_monster_count; j++) {
-        //     if (i != j && monsters[j].is_active) {
-        //         // 檢查2x2區域是否重疊
-        //         bool collision = false;
-        //         for (int mi = 0; mi < 2 && !collision; mi++) {
-        //             for (int mj = 0; mj < 2 && !collision; mj++) {
-        //                 for (int ni = 0; ni < 2 && !collision; ni++) {
-        //                     for (int nj = 0; nj < 2 && !collision; nj++) {
-        //                         if (monsters[i].x + mi == monsters[j].x + ni && 
-        //                             monsters[i].y + mj == monsters[j].y + nj) {
-        //                             collision = true;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
+        for (int j = 0; j < current_monster_count; j++) {
+            if (i != j && monsters[j].is_active) {
+                // 檢查2x2區域是否重疊
+                bool collision = false;
+                for (int mi = 0; mi < 2 && !collision; mi++) {
+                    for (int mj = 0; mj < 2 && !collision; mj++) {
+                        for (int ni = 0; ni < 2 && !collision; ni++) {
+                            for (int nj = 0; nj < 2 && !collision; nj++) {
+                                if (monsters[i].x + mi == monsters[j].x + ni && 
+                                    monsters[i].y + mj == monsters[j].y + nj) {
+                                    collision = true;
+                                }
+                            }
+                        }
+                    }
+                }
                 
-        //         if (collision) {
-        //             // 返回原始位置
-        //             monsters[i].x = monster_x;
-        //             monsters[i].y = monster_y;
-        //             break;
-        //         }
-        //     }
-        // }
+                if (collision) {
+                    // 返回原始位置
+                    monsters[i].x = monster_x;
+                    monsters[i].y = monster_y;
+                    break;
+                }
+            }
+        }
 
         //更新碰撞箱
         monsters[i].box.rec.x=monsters[i].x;
@@ -412,6 +413,7 @@ void check_collision(Hero *hero) {
     } 
 }
 
+
 void get_demage(Hero* hero) {
     for(int i=0; i<current_monster_count; i++) {
         if(monsters[i].is_active) {
@@ -430,6 +432,9 @@ void get_demage(Hero* hero) {
                 
                 // 增加死亡怪物計數
                 dead_monster_count++;
+
+                //檢查寶箱
+                Treasure_OnMonsterKilled(hero);
             }
         }
     }

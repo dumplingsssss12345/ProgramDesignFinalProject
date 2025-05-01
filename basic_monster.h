@@ -20,7 +20,7 @@
 // 添加遊戲時間相關變量（在全局變量部分）
 // 每隔3秒生成一批怪物///////////////// 
  
-#define MONSTER_SPAWN_INTERVAL 6.0f  
+#define MONSTER_SPAWN_INTERVAL 5.0f  
 extern float game_time;              // 遊戲進行時間（秒）///////////////////
 extern float next_spawn_time;        // 下一次生成怪物的時間點//////////////
 
