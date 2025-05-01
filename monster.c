@@ -9,8 +9,8 @@ int dy[4] = {0, 0, -1, 1};
 Vector2 random_empty_position(Hero *hero) {
     double x = hero->position.x;
     double y =hero->position.y;
-    double minDistance = 80;
-    double maxDistance = 100;
+    double minDistance = 50;
+    double maxDistance = 70;
     // do {
     //     pos->x = rand() % (MAP_HEIGHT - 1);  // 減1確保有足夠空間放置2x2怪物
     //     pos->y = rand() % (MAP_WIDTH - 1);   // 減1確保有足夠空間放置2x2怪物

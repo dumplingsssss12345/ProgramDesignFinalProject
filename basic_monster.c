@@ -3,6 +3,7 @@
 #include "monster.h"
 #include <raylib.h>
 
+float pre_game_time = 0.0f;
 float game_time = 0.0f;
 float next_spawn_time = 3.0f;
 int dead_monster_count = 0;
@@ -22,8 +23,8 @@ void spawn_monsters(Hero *hero) {
         monsters[i].width = 2;    // 設置怪物寬度2
         monsters[i].height = 2;    // 設置怪物為高度2
 
-        monsters[i].box.rec.x=monsters[i].x * CELL_SIZE;
-        monsters[i].box.rec.y=monsters[i].y * CELL_SIZE;
+        monsters[i].box.rec.x=monsters[i].x;
+        monsters[i].box.rec.y=monsters[i].y;
         monsters[i].box.rec.width=monsters[i].width * CELL_SIZE;
         monsters[i].box.rec.height=monsters[i].height * CELL_SIZE;
         monsters[i].box.rotationAngle=0.0f;
@@ -40,9 +41,9 @@ void move_monsters_towards_player(Hero *hero) {
         if (!monsters[i].is_active) continue;
         
         // 降低怪物移動的頻率 (調整MONSTER_MOVE_CHANCE來控制怪物速度)
-        if (rand() % 100 < MONSTER_MOVE_CHANCE) {
-            continue;  // 跳過這次移動
-        }
+        // if (rand() % 100 < MONSTER_MOVE_CHANCE) {
+        //     continue;  // 跳過這次移動
+        // }
 
         int monster_x = monsters[i].x;
         int monster_y = monsters[i].y;
@@ -188,8 +189,8 @@ void move_monsters_towards_player(Hero *hero) {
         // }
 
         //更新碰撞箱
-        monsters[i].box.rec.x=monsters[i].x * CELL_SIZE;
-        monsters[i].box.rec.y=monsters[i].y * CELL_SIZE;
+        monsters[i].box.rec.x=monsters[i].x;
+        monsters[i].box.rec.y=monsters[i].y;
         monsters[i].box.rec.width=monsters[i].width * CELL_SIZE;
         monsters[i].box.rec.height=monsters[i].height * CELL_SIZE;
     }
@@ -222,8 +223,8 @@ void add_monsters(Hero *hero) {
                 monsters[current_monster_count].health = 300;
 
                 //碰撞箱
-                monsters[i].box.rec.x=monsters[i].x * CELL_SIZE;
-                monsters[i].box.rec.y=monsters[i].y * CELL_SIZE;
+                monsters[i].box.rec.x=monsters[i].x;
+                monsters[i].box.rec.y=monsters[i].y;
                 monsters[i].box.rec.width=monsters[i].width * CELL_SIZE;
                 monsters[i].box.rec.height=monsters[i].height * CELL_SIZE;
                 monsters[i].box.rotationAngle=0.0f;
@@ -264,8 +265,8 @@ void replace_missing_monsters(Hero *hero) {
                 monsters[i].health = 300;
 
                 //碰撞箱
-                monsters[i].box.rec.x=monsters[i].x * CELL_SIZE;
-                monsters[i].box.rec.y=monsters[i].y * CELL_SIZE;
+                monsters[i].box.rec.x=monsters[i].x;
+                monsters[i].box.rec.y=monsters[i].y;
                 monsters[i].box.rec.width=monsters[i].width * CELL_SIZE;
                 monsters[i].box.rec.height=monsters[i].height * CELL_SIZE;
                 monsters[i].box.rotationAngle=0.0f;
@@ -282,70 +283,70 @@ void draw_monsters() {
     static Color now_color;
     for (int i = 0; i < current_monster_count; i++) {
         if (monsters[i].is_active) {
-            DrawRectangle(monsters[i].x *10, monsters[i].y * 10, 10 *monsters[i].width, 10 * monsters[i].height, RED);
+            // DrawRectangle(monsters[i].x *10, monsters[i].y * 10, 10 *monsters[i].width, 10 * monsters[i].height, RED);
             if(i%2==0) {
                 if((int)(game_time*2)%5==0) {
                     int choose_color=rand()%7;
                     if(choose_color==0){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE *monsters[i].width, CELL_SIZE * monsters[i].height, RED);
+                        DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE *monsters[i].width, CELL_SIZE * monsters[i].height, RED);
                         now_color=RED;
                     }
                     else if(choose_color==1){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, WHITE);
+                        DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, WHITE);
                         now_color=WHITE;
                     }
                     else if(choose_color==2){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, GREEN);
+                        DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, GREEN);
                         now_color=GREEN;
                     }
                     else if(choose_color==3){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, ORANGE);
+                        DrawRectangle(monsters[i].x, monsters[i].y , CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, ORANGE);
                         now_color=ORANGE;
                     }
                     else if(choose_color==4){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, YELLOW);
+                        DrawRectangle(monsters[i].x, monsters[i].y , CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, YELLOW);
                         now_color=YELLOW;
                     }
                     else if(choose_color==5){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, BLUE);
+                        DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, BLUE);
                         now_color=BLUE;
                     }
                     else if(choose_color==6){
-                        DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, PURPLE);
+                        DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, PURPLE);
                         now_color=PURPLE;
                     }
                 }
                 else {
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, now_color);
+                    DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, now_color);
                 }
             } else {
                 int choose_color=rand()%7;
                 if(choose_color==0){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, RED);
+                    DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, RED);
                     now_color=RED;
                 }
                 else if(choose_color==1){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, WHITE);
+                    DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, WHITE);
                     now_color=WHITE;
                 }
                 else if(choose_color==2){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, GREEN);
+                    DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, GREEN);
                     now_color=GREEN;
                 }
                 else if(choose_color==3){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, ORANGE);
+                    DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, ORANGE);
                     now_color=ORANGE;
                 }
                 else if(choose_color==4){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, YELLOW);
+                    DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, YELLOW);
                     now_color=YELLOW;
                 }
                 else if(choose_color==5){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, BLUE);
+                    DrawRectangle(monsters[i].x , monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, BLUE);
                     now_color=BLUE;
                 }
                 else if(choose_color==6){
-                    DrawRectangle(monsters[i].x * CELL_SIZE, monsters[i].y * CELL_SIZE, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, PURPLE);
+                    DrawRectangle(monsters[i].x, monsters[i].y, CELL_SIZE * monsters[i].width, CELL_SIZE * monsters[i].height, PURPLE);
                     now_color=PURPLE;
                 }
 

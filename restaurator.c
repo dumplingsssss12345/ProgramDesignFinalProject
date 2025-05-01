@@ -22,8 +22,8 @@ void DrawGameUI(float time, int currentHP, int maxHP, int currentXP, int maxXP);
 
 int main() {
   //初始化視窗
-  const int screenWidth = 1080;
-  const int screenHeight = 960;
+  const int screenWidth = 1980;
+  const int screenHeight = 1080;
 
   InitWindow(screenWidth, screenHeight, "Restaurator");
 
@@ -106,7 +106,7 @@ int main() {
 
     //主遊戲部份
     // 怪物初始化
-    spawn_monsters();
+    spawn_monsters(hero);
     init_explosions();
 
     //時間計算相關參數
@@ -140,16 +140,16 @@ int main() {
       preTime = nowTime;
 
       //測試用時的程式
-      // if(IsKeyPressed(KEY_W)) {
-      //   isHeroWin = true;
-      // }
+      if(IsKeyPressed(KEY_W)) {
+        isHeroWin = true;
+      }
 
-      // if(IsKeyPressed(KEY_L)) {
-      //   isHeroDead = true;
-      // }
-      // if(IsKeyPressed(KEY_T)) {
-      //   hero->exp = hero->nextLevelExp;
-      // }
+      if(IsKeyPressed(KEY_L)) {
+        isHeroDead = true;
+      }
+      if(IsKeyPressed(KEY_T)) {
+        hero->exp = hero->nextLevelExp;
+      }
 
 
       //更新遊戲時間
@@ -159,7 +159,6 @@ int main() {
       hero->move(hero);
 
       //新增敵人
-      replace_missing_monsters(hero);
       add_monsters(hero);
 
 
@@ -192,6 +191,8 @@ int main() {
 
       EndDrawing();
 
+      //替換已有的敵人
+      replace_missing_monsters(hero);
     }
 
     if(curTime >= 300.0f) {

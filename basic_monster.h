@@ -20,7 +20,7 @@
 // 添加遊戲時間相關變量（在全局變量部分）
 // 每隔3秒生成一批怪物///////////////// 
  
-#define MONSTER_SPAWN_INTERVAL 3.0f  
+#define MONSTER_SPAWN_INTERVAL 6.0f  
 extern float game_time;              // 遊戲進行時間（秒）///////////////////
 extern float next_spawn_time;        // 下一次生成怪物的時間點//////////////
 
@@ -41,7 +41,7 @@ extern int current_monster_count;  // 初始化為0，將在spawn_monsters函數
 extern int active_monster_count;   // 當前活躍的怪物數量
 
 
-void spawn_monsters() ;// 初始化怪物位置
+void spawn_monsters(Hero* hero) ;// 初始化怪物位置
 void move_monsters_towards_player(Hero *hero);// 讓怪物追蹤玩家並從四周包圍
 void add_monsters(Hero *hero);//新增新的怪物
 void replace_missing_monsters(Hero *hero);//檢查並替換消失的怪物

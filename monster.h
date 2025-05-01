@@ -9,9 +9,11 @@
 #include "hero.h"
 
 // 怪物移動間隔設定
-#define MONSTER_MOVE_CHANCE 97  // 越大怪物移動越慢 (1-100)
+ 
+// 越大怪物移動越慢 (1-100) 
+#define MONSTER_MOVE_CHANCE 70  
 
-#define CELL_SIZE 10
+#define CELL_SIZE 20
 
 // 爆炸效果設定
 

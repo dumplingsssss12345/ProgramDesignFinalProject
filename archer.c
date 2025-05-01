@@ -4,7 +4,7 @@
 #include "archer.h"
 #include "lasergun.h"
 
-Archer* ArcherInit(Weapon* weapon) {
+Archer* ArcherInit() {
   char heroName[51] = "archer";
   Hero* base = HeroInit(
     heroName,                                            //角色姓名        
