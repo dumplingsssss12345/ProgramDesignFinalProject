@@ -111,7 +111,7 @@ int WeaponSelectionInterfece() {
 
 int PassiveSelectionInterfece()
 {
-    const char *passives[] = {"Regenerate", "Max hp +20%", "Attack speed +10%"};
+    const char *passives[] = {"Recovery rate + 1", "Max hp +20%", "Attack Power +20%"};
     int numPassives = 3;
     // 檢查被動技能數量是否超過最大限制
     if (numPassives > MAX_PASSIVES) {

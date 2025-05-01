@@ -92,14 +92,14 @@ void HeroUpdate(Hero *self, double deltaTime) {
         int selectedPassive = PassiveSelectionInterfece();
 
         // 根據選擇增加能力
-        if (selectedPassive == 0) {
+        if (selectedPassive == 1) {
             self->hpRecoveryRate += 1.0f; // 生命回復速度增加
         }
-        else if (selectedPassive == 1) {
+        else if (selectedPassive == 2) {
           self->maxHp *= 1.2f;            //最大生命值加20%
           self->hp *= 1.2f;
         }
-        else if (selectedPassive == 2) {
+        else if (selectedPassive == 3) {
             for (int i = 0; i < self->weaponCount; i++) {
                 self->weapons[i]->attackPower*= 1.2f; // 攻擊力 +20%
             }
