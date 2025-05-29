@@ -68,12 +68,29 @@ void HeroMove(Hero* self) {
 void HeroDraw(Hero* self) {
   //角色面朝右方，正常繪製貼圖
   if(self->direction.x == 1) {
-    DrawTexture(self->texture, self->position.x, self->position.y, WHITE);
+    //DrawTexture(self->texture, self->position.x, self->position.y, WHITE);
+    DrawTexturePro(
+      self->texture,
+      (Rectangle){0,0,self->texture.width,self->texture.height},
+      (Rectangle){self->position.x,self->position.y,self->texture.width,self->texture.height},
+      (Vector2){self->texture.width / 2,self->texture.height / 2},
+      0,
+      WHITE
+    );
   }
+  
   //角色面朝左方，將貼圖左右反轉後再繪製
   else {
-    Rectangle source = {0, 0, -self->texture.width, self->texture.height};
-    DrawTextureRec(self->texture, source,self->position, WHITE);
+    //Rectangle source = {0, 0, -self->texture.width, self->texture.height};
+    //DrawTextureRec(self->texture, source,self->position, WHITE);
+    DrawTexturePro(
+      self->texture,
+      (Rectangle){0,0,-self->texture.width,self->texture.height},
+      (Rectangle){self->position.x,self->position.y,self->texture.width,self->texture.height},
+      (Vector2){self->texture.width / 2,self->texture.height / 2},
+      0,
+      WHITE
+    );
   }
 }
 
