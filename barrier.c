@@ -40,8 +40,15 @@ Barrier* BarrierInit() {
 void BarrierAttack(Weapon* self) {
   Barrier* barrier = (Barrier*)self;
 
-  DrawTextureEx(barrier->base.texture, barrier->base.position, 0.0f, barrier->base.attackRange, WHITE);
-
+  //DrawTextureEx(barrier->base.texture, barrier->base.position, 0.0f, barrier->base.attackRange, WHITE);
+  DrawTexturePro(
+    barrier->base.texture,
+    (Rectangle){0,0,barrier->base.texture.width,barrier->base.texture.height},
+    (Rectangle){barrier->base.position.x,barrier->base.position.y,barrier->base.texture.width,barrier->base.texture.height},
+    (Vector2){barrier->base.texture.width / 2,barrier->base.texture.height / 2},
+    0,
+    WHITE
+  );
 }
 
 void BarrierUpdate(Weapon* self, double deltaTime) {
@@ -69,7 +76,11 @@ double CheckBarrierDemage(Weapon *self, struct CollisionBox *box) {
   Barrier* barrier = (Barrier*)self;
   double demage = 0.0f;
 
-  if(CheckCollisionBoxAndCircle(*box, barrier->circleCenter, barrier->radius)) {
+  /*if(CheckCollisionBoxAndCircle(*box, barrier->circleCenter, barrier->radius)) {
+    demage += barrier->base.attackPower;
+  }*/
+
+  if(CheckCollisionBoxAndCircle(*box, barrier->base.position, barrier->radius)) {
     demage += barrier->base.attackPower;
   }
 
